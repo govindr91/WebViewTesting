@@ -20,13 +20,26 @@
             return false;
         }
 
+        function addMenu() {
+                    var message = document.getElementById("message").value;
+                    var lengthLong = document.getElementById("length").checked;
+
+            var menus = {"menus":[
+                                {"name":"overflow", "id":1, "action":"javascript:showToast()", "imageUrl": "http://icons.iconarchive.com/icons/uiconstock/socialmedia/256/Instagram-icon.png"},
+                                {"name":"bill", "id":2, "action":"javascript:app.makeToast('He', true)", "imageUrl":"http://www.jsclasses.org/browse/view/image/file/3901/name/android-icon-36x36.png"},
+                                {"name":"Till", "id":3, "action":"javascript:showToast()", "overflow":1}
+                                ]
+                         };
+            app.addMenus(JSON.stringify(menus));
+        }
+
         /*
          Call the 'showToast' method when the form gets
          submitted (by pressing button or return key on keyboard).
          */
         window.onload = function(){
             var form = document.getElementById("form");
-            form.onsubmit = showToast;
+            form.onsubmit = addMenu;
         }
     </script>
     <script src="file:///android_asset/ionic.bundle.min.js" type="text/javascript"></script>
