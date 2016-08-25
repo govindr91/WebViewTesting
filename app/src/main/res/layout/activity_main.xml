@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,14 +18,66 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <im.delight.android.webview.AdvancedWebView
-        android:id="@+id/web_view"
+    <TextView
+        android:text="“The government and our law enforcing agencies should take a lesson from it that such a big incident took place, where a girl was killed brutally, but they failed to punish the guilty,” she said.
+
+“He attempted suicide, I would have satisfied had he died that a sinner has gone from the earth. But, this is an indication of negligence on the part of our law enforcement agencies,” she rued."
         android:layout_below="@+id/toolbar"
+        android:id="@+id/upper_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="===============================================Below webview================"
+        android:layout_below="@+id/upper_content"
+        android:id="@+id/below_webview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_below="@+id/below_webview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <im.delight.android.webview.AdvancedWebView
+            android:id="@+id/web_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+
+
+    <TextView
+        android:text="anchor"
+        android:id="@+id/anchor"
+        android:clickable="false"
+        android:longClickable="false"
+        android:layout_alignBottom="@+id/toolbar"
+        android:layout_alignParentRight="true"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"/>
+
+    <!--<com.nhaarman.supertooltips.ToolTipRelativeLayout
+        android:id="@+id/activity_main_tooltipRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
+
+    <include layout="@layout/tooltip"
+        android:id="@+id/tooltip_layout"
+        android:layout_below="@+id/anchor"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="-10dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+
+        />
 
 </RelativeLayout>
 
+</ScrollView>
 
 
 <!--

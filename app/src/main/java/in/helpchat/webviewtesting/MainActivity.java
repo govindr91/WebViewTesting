@@ -11,12 +11,18 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
+import com.nhaarman.supertooltips.ToolTip;
+import com.nhaarman.supertooltips.ToolTipRelativeLayout;
+import com.nhaarman.supertooltips.ToolTipView;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -29,6 +35,13 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
     Handler handler;
     WebMenu webMenu;
+
+    ToolTipView myToolTipView;
+    ToolTipRelativeLayout toolTipRelativeLayout;
+    ToolTip toolTip;
+    Toolbar toolbar;
+    View toolTipView;
+    View toolTipLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +49,28 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
         handler = new Handler();
 
-        Toolbar toolbar = (Toolbar)  findViewById(R.id.toolbar);
+        toolbar = (Toolbar)  findViewById(R.id.toolbar);
+        toolTipLayout = findViewById(R.id.tooltip_layout);
+        toolTipLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolTipLayout.setVisibility(View.GONE);
+            }
+        });
+
         setSupportActionBar(toolbar);
 
+//        toolTipRelativeLayout = (ToolTipRelativeLayout) findViewById(R.id.activity_main_tooltipRelativeLayout);
+
         webView = (AdvancedWebView)findViewById(R.id.web_view);
+
+//        toolTipView = LayoutInflater.from(this).inflate(R.layout.content_file, null);
+//
+//        toolTip = new ToolTip()
+//                .withColor(Color.WHITE)
+//                .withShadow()
+//                .withAnimationType(ToolTip.AnimationType.FROM_TOP);
+
 //        webView.loadUrl("http://54.169.163.112/news_view/Humor");
 //        webView.loadUrl("https://www.flipkart.com");
         webView.loadUrl("file:///android_asset/index.html");
@@ -119,14 +150,23 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                 }
                 newMenu.setShowAsAction(overflow);
             }
+
+
         }
 
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        toolTipLayout.setVisibility(View.GONE);
+        return super.onMenuOpened(featureId, menu);
+    }
+
+    @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         System.out.println("======= Prepare option menu called =====");
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -142,6 +182,16 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void openTooltip() {
+        myToolTipView = toolTipRelativeLayout.showToolTipForView(toolTip, findViewById(R.id.anchor));
+        myToolTipView.setOnToolTipViewClickedListener(new ToolTipView.OnToolTipViewClickedListener() {
+            @Override
+            public void onToolTipViewClicked(ToolTipView toolTipView) {
+
+            }
+        });
     }
 
     @Override
@@ -160,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
     @Override
     public void onPageFinished(String url) {
-
+        webView.loadUrl("javascript:app.resize(document.body.getBoundingClientRect().height)");
     }
 
     @Override
@@ -191,6 +241,16 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
          */
         public WebViewJavaScriptInterface(Context context){
             this.context = context;
+        }
+
+        @JavascriptInterface
+        public void resize(final float height) {
+            MainActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    webView.setLayoutParams(new RelativeLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
+                }
+            });
         }
 
         /*
@@ -245,5 +305,21 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             return "{\"name\":\"Adarsh\"}";
         }
 
+
+        @JavascriptInterface
+        public void openTooltip(final String toolTipText) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    TextView content = (TextView) toolTipLayout.findViewById(R.id.tooltip_contenttv);
+                    content.setText(toolTipText);
+
+                    toolTipLayout.setVisibility(View.VISIBLE);
+                }
+            });
+
+        }
     }
+
+
 }
